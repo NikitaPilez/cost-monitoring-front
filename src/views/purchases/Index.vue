@@ -53,10 +53,6 @@
 import axios from "axios";
 import _ from "lodash";
 
-const isDev = !!window.location.hostname.match(/^(localhost|127\.|192\.)/);
-
-export const endpoint = isDev ? 'http://localhost:8000' : 'https://cost-monitoring.wiggaz.xyz';
-
 export default {
   name: "purchaseIndex",
   data: () => ({
@@ -85,7 +81,7 @@ export default {
     }, 100),
     async fetchData() {
       await axios
-        .get(endpoint + `/api/purchases/${this.id}`, { params: { search: this.filter.search } })
+        .get(process.env.VUE_APP_BACKEND_URL + `/api/purchases/${this.id}`, { params: { search: this.filter.search } })
         .then((response) => {
           this.collection = response.data.data;
         })
