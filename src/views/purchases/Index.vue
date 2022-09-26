@@ -14,11 +14,32 @@
       </div>
     </v-tabs>
     <v-divider />
+    <v-card>
+      <v-card-text>
+        <v-row class="align-center">
+          <v-col cols="12" lg="4" class="d-flex flex-wrap flex-lg-nowrap">
+            <v-text-field
+                class="me-lg-3"
+                label="Filter monitoring items"
+                v-model="filter.search"
+                clearable
+                dense
+                solo-inverted
+            />
+          </v-col>
+          <v-col
+              cols="12"
+              lg="2"
+              class="d-flex align-center justify-lg-end mb-5"
+          >
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
     <v-data-table
         class="elevation-0"
         :headers="selectedHeaders"
         :items="collection"
-        :options.sync="options"
         :footer-props="{
         'items-per-page-options': [10, 25, 50, 100],
       }"
@@ -30,22 +51,39 @@
 <script>
 
 import axios from "axios";
+import _ from "lodash";
 
 export default {
   name: "purchaseIndex",
   data: () => ({
     selectedHeaders: [],
     collection: [],
-    options: {},
     id: null,
+    filter: {},
   }),
+  watch: {
+    "filter.search": {
+      handler() {
+        this.changeData();
+      }
+    }
+  },
   methods: {
+    changeData() {
+      if (this.storeFilter !== this.filter) {
+        this.$store.dispatch("purchaseFilter", this.filter);
+      }
+
+      this.callFetchData();
+    },
+    callFetchData: _.debounce(function () {
+      this.fetchData();
+    }, 100),
     async fetchData() {
       await axios
-        // .get(`http://127.0.0.1:8000/api/purchases/${this.id}`)
-        .get(`http://cost-monitoring.wiggaz.xyz/api/purchases/${this.id}`)
+        .get(process.env.VUE_APP_BACKEND_URL + `/api/purchases/${this.id}`, { params: { search: this.filter.search } })
         .then((response) => {
-          this.collection = response.data.data.purchases;
+          this.collection = response.data.data;
         })
         .catch((error) => {
           console.log(error);
@@ -64,10 +102,14 @@ export default {
         { text: 'Amount', value: 'sms_id' },
       ];
     },
+    storeFilter() {
+      return this.$store.state.purchase.purchaseFilter;
+    },
   },
   mounted() {
     this.selectedHeaders = this.headers;
     this.id = this.$route.params.id;
+    this.filter = this.$store.state.purchase.purchaseFilter;
   }
 }
 </script>
