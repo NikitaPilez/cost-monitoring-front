@@ -6,7 +6,7 @@ cd ${tmp} && \
 echo "Building..." && \
 npm i && \
 npm run build && \
-rm -rf .env.example .gitignore deploy.sh .git* README.md && \
+rm -rf .gitignore deploy.sh .git* README.md && \
 echo "Deploying..." && \
 rsync -av --delete ./dist/ user@143.198.113.70:www/ && \
 echo "Done in ${SECONDS} sec."
