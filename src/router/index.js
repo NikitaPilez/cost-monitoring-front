@@ -11,10 +11,15 @@ const routes = [
     component: HomeView
   },
   {
-    path: "/purchases/:id",
+    path: "/user/:userId/purchases",
     name: "purchaseIndex",
     component: () => import("@/views/purchases/Index"),
-  }
+  },
+  {
+    path: "/user/:userId/purchases/:purchaseId",
+    name: "purchaseShow",
+    component: () => import("@/views/purchases/Show"),
+  },
 ]
 
 const router = new VueRouter({

@@ -44,25 +44,28 @@
         'items-per-page-options': [10, 25, 50, 100],
       }"
     >
+      <template v-slot:[`item.action`]="{ item }">
+        <v-btn
+          color="primary"
+          :to="{ name: 'purchaseShow', params: { userId: item.user_id, purchaseId: item.id} } "
+          >Show
+        </v-btn>
+      </template>
     </v-data-table>
   </v-container>
 </template>
 
 <script>
 
-import axios from "axios";
+import axios from "@/axios";
 import _ from "lodash";
-
-const isDev = !!window.location.hostname.match(/^(localhost|127\.|192\.)/);
-
-export const endpoint = isDev ? 'http://localhost:8080' : 'https://cost-monitoring.wiggaz.xyz';
 
 export default {
   name: "purchaseIndex",
   data: () => ({
     selectedHeaders: [],
     collection: [],
-    id: null,
+    userId: null,
     filter: {},
   }),
   watch: {
@@ -85,7 +88,7 @@ export default {
     }, 100),
     async fetchData() {
       await axios
-        .get(endpoint + `/api/purchases/${this.id}`, { params: { search: this.filter.search } })
+        .get(`/api/user/${this.userId}/purchases`, { params: { search: this.filter.search } })
         .then((response) => {
           this.collection = response.data.data;
         })
@@ -98,12 +101,11 @@ export default {
   computed: {
     headers() {
       return [
+        { text: 'Place', value: 'place' },
         { text: 'Amount', value: 'amount' },
         { text: 'Balance', value: 'balance' },
-        { text: 'Body', value: 'body' },
         { text: 'Buy at', value: 'buy_at' },
-        { text: 'Place', value: 'place' },
-        { text: 'Amount', value: 'sms_id' },
+        { text: 'Action', value: 'action' },
       ];
     },
     storeFilter() {
@@ -112,7 +114,7 @@ export default {
   },
   mounted() {
     this.selectedHeaders = this.headers;
-    this.id = this.$route.params.id;
+    this.userId = this.$route.params.userId;
     this.filter = this.$store.state.purchase.purchaseFilter;
   }
 }
