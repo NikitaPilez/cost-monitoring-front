@@ -8,5 +8,5 @@ npm i && \
 npm run build && \
 rm -rf .gitignore deploy.sh .git* README.md && \
 echo "Deploying..." && \
-rsync -av --delete ./dist/ user@143.198.113.70:www/ && \
+rsync -av --delete ./dist/ user@142.93.102.201:frontend/ && \
 echo "Done in ${SECONDS} sec."

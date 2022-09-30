@@ -1,14 +1,11 @@
 import axios from "axios";
 
-const isDev = !!window.location.hostname.match(/^(localhost|127\.|192\.)/);
-
-export const endpoint = isDev ? 'http://localhost:8000' : 'https://cost-monitoring.wiggaz.xyz';
-
 const options = {
-    baseURL: endpoint,
+    baseURL: process.env.VUE_APP_API_URL,
     headers: {
         "Content-Type": "application/json;charset=utf-8",
         "Cache-Control": "no-cache",
+        "Authorization": "Bearer 1|94tCykQKIuRAlSbeQQ6rggWojbrwaLwrTXmUSNd4"
     },
 };
 
