@@ -116,6 +116,10 @@ export default {
     this.selectedHeaders = this.headers;
     this.userId = this.$route.params.userId;
     this.filter = this.$store.state.purchase.purchaseFilter;
+
+    Echo.channel('new-purchase').listen('NewPurchase', ({userPurchases}) => {
+      this.collection = userPurchases.data;
+    })
   }
 }
 </script>
