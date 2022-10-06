@@ -11,6 +11,11 @@ const routes = [
     component: HomeView
   },
   {
+    path: "/auth",
+    name: "auth",
+    component: () => import("@/views/Auth"),
+  },
+  {
     path: "/user/:userId/purchases",
     name: "purchaseIndex",
     component: () => import("@/views/purchases/Index"),
