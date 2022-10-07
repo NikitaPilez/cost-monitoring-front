@@ -14,6 +14,7 @@ window.Echo = new Echo({
   broadcaster: 'pusher',
   key: process.env.VUE_APP_PUSHER_APP_KEY,
   wsPort: process.env.VUE_APP_PUSHER_APP_PORT,
+  wssPort: process.env.VUE_APP_PUSHER_APP_PORT,
   wsHost: process.env.VUE_APP_WEBSOCKET_URL,
   forceTLS: false,
   disableStats: true,
