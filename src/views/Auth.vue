@@ -108,32 +108,22 @@ export default {
       await axios
           .post(`/api/login`, { email: this.loginEmail, password: this.loginPassword } )
           .then((response) => {
-            if (response.data.success === true) {
-              localStorage.token = response.data.token;
-              this.$router.push({ name: "home" });
-            } else {
-              this.loginErrorMessage = response.data.error;
-            }
+            localStorage.token = response.data.token;
+            this.$router.push({ name: "home" });
           })
           .catch((error) => {
-            console.log(error);
-            alert("Error: see in console");
+            this.loginErrorMessage = error.response.data.message;
           });
     },
     async register() {
       await axios
           .post(`/api/register`, { name: this.registerName, email: this.registerEmail, password: this.registerPassword } )
           .then((response) => {
-            if (response.data.user) {
               localStorage.token = response.data.token;
               this.$router.push({ name: "home" });
-            } else {
-              this.registerErrorMessage = response.data.error;
-            }
           })
           .catch((error) => {
-            console.log(error);
-            alert("Error: see in console");
+            this.registerErrorMessage = error.response.data.message;
           });
     },
     validate() {
